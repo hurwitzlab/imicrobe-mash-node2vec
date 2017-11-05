@@ -1,0 +1,5 @@
+.idea
+imicrobe_mash_node2vec.egg-info
+
+*.edgelist
+*.emb
