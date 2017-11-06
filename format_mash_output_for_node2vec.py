@@ -50,19 +50,27 @@ def main():
 
     sys.stderr.write('writing file "{}"\n'.format(output_fp))
 
+    edge_count = 0
+    eliminated_edge_count = 0
     with open(output_fp, 'wt') as output_file:
         for i, j in itertools.combinations(all_vs_all_df.index[:args.limit], r=2):
             # i and j look like
             #   /work/05066/imicrobe/iplantc.org/data/imicrobe/projects/193/samples/4078/mgm4601014.3.050.upload.fna
             mash_distance = all_vs_all_df.loc[i, j]
-            i_sample_id = int(os.path.basename(os.path.dirname(i)))
-            j_sample_id = int(os.path.basename(os.path.dirname(j)))
-            if args.distance:
-                output_file.write('{} {} {:8.6f}\n'.format(i_sample_id, j_sample_id, mash_distance))
+            if mash_distance >= 1.0:
+                eliminated_edge_count += 1
             else:
-                # similarity
-                output_file.write('{} {} {:8.6f}\n'.format(i_sample_id, j_sample_id, 1.0 - mash_distance))
+                edge_count += 1
+                i_sample_id = int(os.path.basename(os.path.dirname(i)))
+                j_sample_id = int(os.path.basename(os.path.dirname(j)))
+                if args.distance:
+                    output_file.write('{} {} {:8.6f}\n'.format(i_sample_id, j_sample_id, mash_distance))
+                else:
+                    # similarity
+                    output_file.write('{} {} {:8.6f}\n'.format(i_sample_id, j_sample_id, 1.0 - mash_distance))
 
+    print('edge count: {}'.format(edge_count))
+    print('eliminated {} edges'.format(eliminated_edge_count))
 
 
 if __name__ == '__main__':
