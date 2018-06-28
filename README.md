@@ -43,3 +43,17 @@ Install Hurwitz Lab fork of node2vec.
 The node2vec algorithm is computationally expensive. To install an efficient
 implementation on Stampede2 it is important to use, as much as possible, the
 native optimized BLAS library.
+
+#### Using module python3
+
+This works.
+
+```
+login2.stampede2(24)$ module load python3 gcc/7.1.0 mkl/18.0.0
+login2.stampede2(25)$ mkdir $WORK/venv
+login2.stampede2(26)$ python3 -m venv $WORK/venv/n2v
+login2.stampede2(27)$ source $WORK/venv/n2v/bin/activate
+(n2v) login2.stampede2(28)$ pip3 install -r requirements.txt
+```
+
+I should try installing without loading gcc/7.1.0 and mkl/18.0.0.0.
